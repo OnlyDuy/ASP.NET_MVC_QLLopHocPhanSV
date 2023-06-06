@@ -18,6 +18,7 @@
 </style>
 
 
+
 @model List<QLLopHocPhanSV.Models.tbl_SinhVien>
 @{
     ViewBag.Title = "Danh sách sinh viên";
@@ -91,16 +92,19 @@
     var currentPage = 1
     var totalPage
 
+    // Gọi hàm tìm kiếm 
     function setSearchVal() {
         searchVal = $("#box-search").val()
         console.log(searchVal)
     }
 
+    // Gọi hàm sắp xếp 
     function setSortType() {
         sortType = parseInt($("#sortType").val())
         console.log(sortType)
     }
 
+    // Gọi hàm phân trang 
     function setPageSize() {
         pageSize = parseInt($("#pageSize").val())
         console.log(pageSize)
@@ -154,20 +158,28 @@
             method: "GET",
             data: { searchVal, sortType, pageSize, currentPage },
             success: function (result) {
+                // Kết quả trả về là 1 đối tượng JSON
                 var obj = JSON.parse(result);
                 console.log(obj);
 
+                //  Chuyển đến hàm renderTable(obj) để hiển thị bảng
                 renderTable(obj.dssv)
+
+                // Tạo phân trang 
                 totalPage = obj.totalPage
                 createPagination(obj.totalPage)
+
+                // Mặc định trang hiện tại là 1
                 currentPage = 1
-                
             }
         })
     }
 
+    // Hàm tạo ra các phần tử phân trang dựa trên tổng số trang 
     function createPagination(totalPages) {
+        // Tính trang trước đó
         var previousPage = currentPage - 1;
+        // Tính trang sau
         var nextPage = currentPage + 1;
         var paginationHTML = `<nav aria-label="Page navigation example" class="mt-5">
                                 <ul class="pagination justify-content-ce  nter">
@@ -193,15 +205,19 @@
         $("#pagination-container").html(paginationHTML)
     }
 
+    // Hàm đánh dấu trang hiện tại là trang đang được chọn trong phân trang
     function setActivePage() {
+        // Xóa các phần tử có active
         var paginationItems = $('.page-item');
         paginationItems.forEach(function (item) {
             item.removeClass('active');
         });
+        // lấy đúng phần tử hiện tại và thêm active
         var currentPageItem = $(`.page-item:nth-child(${currentPage + 1})`);
         currentPageItem.allClass('active');
     }
 
+    // Hàm chuyển đến trang được chọn xem có hợp lệ không và gọi GetListSV() để lấy dssv
     function setPage(page) {
         if (page < 1) {
             currentPage = 1;
