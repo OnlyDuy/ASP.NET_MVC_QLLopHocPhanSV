@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "Sửa thông tin sinh viên";
+    string mssv = Request["id"];
+}
+
+<input type="hidden" id="MSSV-Hidden" name="MSSV-Hidden" value="@mssv" />
+<form id="form_act" enctype="multipart/form-data" method="post">
+    <div class="card-body">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Mã số sinh viên</label>
+            <input type="text" readonly name="MSSV" class="form-control" id="MSSV" placeholder="@mssv">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Họ tên</label>
+            <input type="text" name="HoTen" class="form-control" id="HoTen" placeholder="Nhập Họ tên sinh viên">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Địa chỉ</label>
+            <input type="text" name="DiaChi" class="form-control" id="DiaChi" placeholder="Nhập Địa chỉ">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="exampleInputEmail1">Khóa học</label>
+                <input type="text" name="KhoaHoc" class="form-control" id="KhoaHoc" placeholder="Nhập Khóa học">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="exampleInputEmail1">Lớp quản lý</label>
+                <input type="text" name="LopQuanLy" class="form-control" id="LopQuanLy" placeholder="Nhập Lớp quản lý">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="exampleInputEmail1">Ngày sinh</label>
+                <input type="date" name="NgaySinh" class="form-control" id="NgaySinh" placeholder="Nhập Ngày sinh">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="exampleInputEmail1">Giới tính</label>
+                <select class="form-control" id="Gioitinh" name="Gioitinh">
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <div class="card-footer d-flex">
+        <div id="btn_comback">
+            <a href="/SinhVien" class="btn btn-secondary">Quay lại</a>
+        </div>
+
+        <div class="ml-5">
+            <button type="button" id="btn_update" class="btn btn-primary">Cập nhật</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function FillData(obj) {
+        $('#MSSV').val(obj.MSSV);
+        $('#HoTen').val(obj.HoTen);
+        $('#DiaChi').val(obj.DiaChi);
+        $('#KhoaHoc').val(obj.KhoaHoc);
+        $('#LopQuanLy').val(obj.LopQuanLy);
+        $('#NgaySinh').val(ParseInputDate(obj.NgaySinh));
+        $('#Gioitinh').val(obj.GioiTinh);
+    }
+
+    function GetObj() {
+        var mssv = $('#MSSV-Hidden').val();
+        $.ajax({
+            url: "/Sinhvien/GetObject",
+            method: "POST",
+            data: { mssv },
+            success: function (result, status, xhr) {
+                let rs = JSON.parse(result);
+                console.log(rs);
+                FillData(rs);
+            },
+            error: function () {
+                toastr.error("Mất kết nối với máy chủ!");
+            }
+        });
+    }
+
+    function Update() {
+        if (confirm("Xác nhận cập nhật thông tin sinh viên")) {
+            let form = $('#form_act')[0];
+            let formData = new FormData(form);
+            console.log(formData);
+            $.ajax({
+                url: "/Sinhvien/PostEdit",
+                method: "POST",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, status, xhr) {
+                    let rs = JSON.parse(result);
+                    console.log(rs);
+                    if (rs.ErrCode == 1) {
+                        toastr.success(rs.Message);
+                    }
+                    else {
+                        toastr.error(rs.Message);
+                    }
+                },
+                error: function () {
+                    toastr.error("Mất kết nối với máy chủ!");
+                }
+            });
+        }
+    }
+
+    function ParseInputDate(str) {
+        str = str.split('T')[0];    
+        result = str;
+        return result;
+    }
+    $(function () {
+        $('#btn_update').click(function () {
+            Update();
+        });
+        GetObj();
+    });
+
+</script>

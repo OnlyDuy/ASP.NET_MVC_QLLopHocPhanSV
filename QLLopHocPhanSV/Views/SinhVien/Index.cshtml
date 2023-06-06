@@ -1,0 +1,246 @@
+﻿﻿
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+
+
+@model List<QLLopHocPhanSV.Models.tbl_SinhVien>
+@{
+    ViewBag.Title = "Danh sách sinh viên";
+}
+
+
+<div class="container ">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <form>
+                <div class="input-group mb-3">
+                    <label class="mr-1 col-form-label">Chọn kiểu sắp xếp</label>
+                    <select class="form-control" onchange="setSortType()" id="sortType" name="sortType">
+                        <option value=0>Sắp xếp theo MSSV</option>
+                        <option value=1>Sắp xếp theo Họ Tên</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="form-group col-md-4">
+            <form>
+                <div class="input-group mb-3">
+                    <label class="mr-1 col-form-label">Tìm kiếm</label>
+                    <input class="form-control" onchange="setSearchVal()" id="box-search" type="text" placeholder="Nhập Mssv hoặc Tên">
+                </div>
+            </form>
+        </div>
+        <div class="form-group col-md-2">
+            <input type="button" class="btn btn-success" onclick="GetListSV()" value="Apply">
+        </div>
+    </div>
+
+    <div class="form-row mb-2">
+        <div>
+            <label class="col-form-label" for="pageSize">Chọn số lượng dòng/trang</label>
+            <input onchange="setPageSize()" type="number" id="pageSize" name="pageSize" min="1" max="10" value=2>
+        </div>
+        <div class="ml-auto">
+            <a class="btn btn-primary" href="/SinhVien/Create" role="button" id="">Thêm sinh viên</a>
+        </div>
+    </div>
+
+</div>
+    <table id="tbl_data" class="table">
+        <thead class="thead-dark">
+            <tr align='center'>
+                <th>STT</th>
+                <th>MSSV</th>
+                <th>HoTen</th>
+                <th>Địa chỉ</th>
+                <th>Khóa học</th>
+                <th>Lớp quản lý</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="tbl_data_printer"></tbody>
+
+    </table>
+
+    <div id="pagination-container">
+
+    </div>
+
+
+<script>
+    var pageSize = 3
+    var sortType = 0
+    var searchVal = ''
+    var currentPage = 1
+    var totalPage
+
+    function setSearchVal() {
+        searchVal = $("#box-search").val()
+        console.log(searchVal)
+    }
+
+    function setSortType() {
+        sortType = parseInt($("#sortType").val())
+        console.log(sortType)
+    }
+
+    function setPageSize() {
+        pageSize = parseInt($("#pageSize").val())
+        console.log(pageSize)
+    }
+
+    // hàm hiển thị các dữ liệu lên bảng danh sách sinh viên
+    function renderTableBody(obj) {
+        // thiết lập dữ liệu bảng ban đầu là rỗng
+        $('#tbl_data_printer').empty();
+        // Câu lệnh để gọi ra các id của thẻ trong html và thay đổi các thành phần của nó
+        // Giống câu lệnh document.getElementByID và innerHTML trong JavaScript
+        let htmlResult = "";
+
+        // Câu lệnh để duyệt qua danh sách trong bảng
+        // obl.length là độ dài của Object Sinh Viên
+        for (let i = 0; i < obj.length; i++) {
+            htmlResult += "\
+                                <tr>\
+                                    <td>" + (i + 1) + "</td>\
+                                    <td class ='MSSV'>" + obj[i].MSSV + "</td>\
+                                    <td class='HoTen'>" + obj[i].HoTen + "</td>\
+                                    <td>" + obj[i].DiaChi + "</td>\
+                                    <td>" + obj[i].KhoaHoc + "</td>\
+                                    <td>" + obj[i].LopQuanLy + "</td>\
+                                    <td>" + obj[i].NgaySinh + "</td>\
+                                    <td>" + obj[i].GioiTinh + "</td>\
+                                    <td>\
+                                    <a href=\"/Sinhvien/Edit?id="+ obj[i].MSSV + "\"class=\"btn btn-primary mr-2\"><i class=\"fas fa-edit\"></i></a>\
+                                    <button onclick=\"Delete(this)\" class=\"btn btn-danger\"><i class=\"fas fa-trash\"></i></button>\
+                                    </td>\
+                                    ";
+        }
+
+        // Hàm append là hàm nối chuỗi (thêm vào sau)
+        $('#tbl_data_printer').append(htmlResult);
+    }
+
+    function renderTable(obj) {
+        // gọi lại hàm renderTableBody trong hàm cha
+        renderTableBody(obj)
+    }
+
+
+    // Hàm này dùng ajax để gọi 1 phương thức trong Controller
+    function GetListSV() {
+        $.ajax({
+            // Thuộc tính url này sẽ gọi đến 1 phương thức nằm trong controller
+            url: "/SinhVien/GetListSV",
+            // method POST để đọc dữ liệu trong database
+            // method POST để ghi dữ liệu trong database
+            method: "GET",
+            data: { searchVal, sortType, pageSize, currentPage },
+            success: function (result) {
+                var obj = JSON.parse(result);
+                console.log(obj);
+
+                renderTable(obj.dssv)
+                totalPage = obj.totalPage
+                createPagination(obj.totalPage)
+                currentPage = 1
+                
+            }
+        })
+    }
+
+    function createPagination(totalPages) {
+        var previousPage = currentPage - 1;
+        var nextPage = currentPage + 1;
+        var paginationHTML = `<nav aria-label="Page navigation example" class="mt-5">
+                                <ul class="pagination justify-content-ce  nter">
+                                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                                      <a class="page-link" href="#" ${currentPage !== 1 ? `onclick="setPage(${previousPage})"` : ''}>Previous</a>
+                                    </li>`;
+        for (var i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                paginationHTML += `<li class="page-item active">
+                                    <a class="page-link" href="#" onclick="setPage(${i})">${i}</a>
+                                   </li>`;
+            } else {
+                paginationHTML += `<li class="page-item">
+                                    <a class="page-link" href="#" onclick="setPage(${i})">${i}</a>
+                                   </li>`;
+            }
+        }
+        paginationHTML += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                              <a class="page-link" href="#" ${currentPage !== totalPages ? `onclick="setPage(${nextPage})"` : ''}>Next</a>
+                           </li>
+                         </ul>
+                        </nav>`;
+        $("#pagination-container").html(paginationHTML)
+    }
+
+    function setActivePage() {
+        var paginationItems = $('.page-item');
+        paginationItems.forEach(function (item) {
+            item.removeClass('active');
+        });
+        var currentPageItem = $(`.page-item:nth-child(${currentPage + 1})`);
+        currentPageItem.allClass('active');
+    }
+
+    function setPage(page) {
+        if (page < 1) {
+            currentPage = 1;
+        } else if (page > totalPage) {
+            currentPage = totalPage;
+        } else {
+            currentPage = page;
+        }
+        GetListSV();
+    }
+
+    function Delete(ele) {
+        var mssv = $(ele).parents("tr").find(".MSSV").text();
+        var name = $(ele).parents("tr").find(".HoTen").text();
+        console.log(mssv);
+        if (confirm("Xác nhận xóa sinh viên:" + name)) {
+            $.ajax({
+                url: "/Sinhvien/Delete",
+                method: "POST",
+                data: { mssv },
+                success: function (result, status, xhr) {
+                    let rs = JSON.parse(result);
+                    console.log(rs);
+                    if (rs.ErrCode == 1) {
+                        toastr.success(rs.Message);
+                        location.reload();
+                    }
+                    else {
+                        toastr.error(rs.Message);
+                    }
+                },
+                error: function () {
+                    toastr.error("Mất kết nối với máy chủ!");
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        GetListSV()
+    })
+</script>
