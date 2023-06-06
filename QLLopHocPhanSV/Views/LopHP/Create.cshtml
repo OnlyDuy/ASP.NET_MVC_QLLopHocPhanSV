@@ -1,0 +1,70 @@
+﻿﻿@{
+    ViewBag.Title = "Thêm mới lớp học phần";
+}
+<form id="form_act" method="post">
+    <div class="card-body">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Mã lớp</label>
+            <input type="text" name="MaLop" class="form-control" id="MSSV" placeholder="Nhập Malop">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Tên lớp</label>
+            <input type="text" name="TenLop" class="form-control" id="HoTen" placeholder="Nhập tên lớp">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Số tín chỉ</label>
+            <input type="text" name="SoTinChi" class="form-control" id="MSSV" placeholder="Nhập Số tín chỉ">
+        </div>
+    </div>
+    <!-- /.card-body -->
+
+    <div class="card-footer d-flex">
+        <div id="btn_comback">
+            <a href="/LopHP" class="btn btn-secondary">Quay lại</a>
+        </div>
+
+        <div class="ml-5">
+            <button type="button" id="btn_insert" class="btn btn-primary">
+                Thêm mới
+            </button>
+        </div>
+    </div>
+</form>
+<script>
+    function Create() {
+        if (confirm("Xác nhận thêm lớp học phần")) {
+            let form = $('#form_act')[0];
+            let formData = new FormData(form);
+            console.log(formData);
+            $.ajax({
+                url: "/LopHP/PostCreate",
+                method: "POST",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, status, xhr) {
+                    // Trả về từ Json về dạng chuỗi
+                    let rs = JSON.parse(result);
+                    console.log(rs);
+                    // Kiểm tra ErrCode
+                    if (rs.ErrCode == 1) {
+                        toastr.success(rs.Message);
+
+                    }
+                    else {
+                        toastr.error(rs.Message);
+                    }
+                },
+                error: function () {
+                    toastr.error("Mất kết nối với máy chủ!");
+                }
+            });
+        }
+    }
+
+    $(function () {
+        $('#btn_insert').click(function () {
+            Create();
+        });
+    });
+</script>

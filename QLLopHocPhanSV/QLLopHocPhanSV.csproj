@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LopHPController.cs" />
     <Compile Include="Controllers\SinhVienController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2251,6 +2252,8 @@
     <Content Include="theme\plugins\summernote\summernote.min.js.map" />
     <Content Include="theme\plugins\toastr\toastr.js.map" />
     <Content Include="Views\SinhVien\Edit.cshtml" />
+    <Content Include="Views\LopHP\Index.cshtml" />
+    <Content Include="Views\LopHP\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

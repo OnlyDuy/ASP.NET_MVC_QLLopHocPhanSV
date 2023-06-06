@@ -1,0 +1,104 @@
+﻿﻿
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+
+
+
+@model List<QLLopHocPhanSV.Models.tbl_LopHocPhan>
+@{
+    ViewBag.Title = "Danh sách lớp học phần";
+}
+<div class="form-row mb-2">
+    <div class="ml-5">
+        <a class="btn btn-primary" href="/LopHP/Create" role="button" id="">Thêm lớp</a>
+    </div>
+</div>
+<table id="tbl_data" class="table">
+    <thead class="thead-dark">
+        <tr align='center'>
+            <th>STT</th>
+            <th>Mã lớp</th>
+            <th>Tên lớp</th>
+            <th>Số tín chỉ</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody id="tbl_data_printer"></tbody>
+
+</table>
+
+<div id="pagination-container">
+
+</div>
+
+<script>
+
+    function renderTableBody(obj) {
+
+        let htmlResult = "";
+
+        // Câu lệnh để duyệt qua danh sách trong bảng
+        // obl.length là độ dài của Object Sinh Viên
+        for (let i = 0; i < obj.length; i++) {
+            htmlResult += "\
+                                <tr>\
+                                    <td>" + (i + 1) + "</td>\
+                                    <td>" + obj[i].MaLop + "</td>\
+                                    <td>" + obj[i].TenLop + "</td>\
+                                    <td>" + obj[i].SoTinChi + "</td>\
+                                    <td>\
+                                    <a href=\"/Sinhvien/Edit?id="+ obj[i].MaLop + "\"class=\"btn btn-primary mr-2\"><i class=\"fas fa-edit\"></i></a>\
+                                    <button onclick=\"Delete(this)\" class=\"btn btn-danger\"><i class=\"fas fa-trash\"></i></button>\
+                                    </td>\
+                                </tr>\
+                                    ";
+        }
+
+        // Hàm append là hàm nối chuỗi (thêm vào sau)
+        $('#tbl_data_printer').append(htmlResult);
+    }
+
+    function renderTable(obj) {
+        // gọi lại hàm renderTableBody trong hàm cha
+        renderTableBody(obj)
+    }
+
+
+    // Hàm này dùng ajax để gọi 1 phương thức trong Controller
+    function GetListLHP() {
+        $.ajax({
+            // Thuộc tính url này sẽ gọi đến 1 phương thức nằm trong controller
+            url: "/LopHP/GetListLHP",
+            // method POST để đọc dữ liệu trong database
+            // method GET để ghi dữ liệu trong database
+            method: "GET",
+            success: function (result) {
+                // Kết quả trả về là 1 đối tượng JSON
+                var obj = JSON.parse(result);
+                console.log(obj);
+
+                //  Chuyển đến hàm renderTable(obj) để hiển thị bảng
+                renderTable(obj)
+            }
+        })
+    }
+
+    $(document).ready(function () {
+        GetListLHP()
+    })
+</script>
