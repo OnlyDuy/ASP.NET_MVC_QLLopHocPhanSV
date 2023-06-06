@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using System.Globalization;
-
+using System.Security.Cryptography;
 
 namespace QLLopHocPhanSV.Controllers
 {
@@ -87,22 +87,42 @@ namespace QLLopHocPhanSV.Controllers
                 string ngaySinh = Request["NgaySinh"];
                 string gioiTinh = Request["GioiTinh"];
 
-                tbl_SinhVien newSV = new tbl_SinhVien();
-                newSV.MSSV= mSSV;
-                newSV.HoTen = hoTen;
-                newSV.KhoaHoc = khoaHoc;
-                newSV.LopQuanLy = lopQuanLy;
-                newSV.DiaChi = diaChi;
-                newSV.NgaySinh = DateTime.ParseExact(ngaySinh, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                newSV.GioiTinh = gioiTinh;
-                // Gọi đến bảng sinh viên và insert dữ liệu
-                db.tbl_SinhViens.InsertOnSubmit(newSV);
-                // Lưu thay đổi
-                db.SubmitChanges();
+                // Kiểm tra các trường không được để trống
+                if (string.IsNullOrEmpty(mSSV) || string.IsNullOrEmpty(hoTen) || string.IsNullOrEmpty(diaChi) || string.IsNullOrEmpty(khoaHoc) || string.IsNullOrEmpty(lopQuanLy) || string.IsNullOrEmpty(ngaySinh) || string.IsNullOrEmpty(gioiTinh))
+                {
+                    rs.ErrCode = EnumErrCode.Fail;
+                    rs.Message = "Các trường không được để trống";
+                }
+                else
+                {
+                    // Kiểm tra xem MSSV đã tồn tại trong cơ sở dữ liệu chưa
+                    int isExist = db.tbl_SinhViens.Count(sv => sv.MSSV == mSSV);
 
-                // Hiển thị success Thêm thành công
-                rs.ErrCode = EnumErrCode.Success;
-                rs.Message = "Thêm mới sinh viên thành công";
+                    if (isExist == 1)
+                    {
+                        rs.ErrCode = EnumErrCode.Fail;
+                        rs.Message = "Mã số sinh viên đã tồn tại";
+                    }
+                    else
+                    {
+                        tbl_SinhVien newSV = new tbl_SinhVien();
+                        newSV.MSSV= mSSV;
+                        newSV.HoTen = hoTen;
+                        newSV.KhoaHoc = khoaHoc;
+                        newSV.LopQuanLy = lopQuanLy;
+                        newSV.DiaChi = diaChi;
+                        newSV.NgaySinh = DateTime.ParseExact(ngaySinh, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        newSV.GioiTinh = gioiTinh;
+                        // Gọi đến bảng sinh viên và insert dữ liệu
+                        db.tbl_SinhViens.InsertOnSubmit(newSV);
+                        // Lưu thay đổi
+                        db.SubmitChanges();
+
+                        // Hiển thị success Thêm thành công
+                        rs.ErrCode = EnumErrCode.Success;
+                        rs.Message = "Thêm mới sinh viên thành công";
+                    }
+                }
             }
             catch(Exception ex)
             {
