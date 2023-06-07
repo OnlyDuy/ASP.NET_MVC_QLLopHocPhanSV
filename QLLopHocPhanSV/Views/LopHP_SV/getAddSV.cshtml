@@ -57,7 +57,7 @@
 
     function getList() {
         $.ajax({
-            url: "/SinhVien/getListSvToAdd?mssv=@ViewBag.mssv",
+            url: "/SinhVien/getListSvToAdd?malop=@ViewBag.MaLop",
             method: "GET",
             success: function (result) {
                 var obj = JSON.parse(result)

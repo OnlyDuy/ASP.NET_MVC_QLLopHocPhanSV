@@ -12,9 +12,9 @@ namespace QLLopHocPhanSV.Controllers
     {
         QLLHSVDataContext db = new QLLHSVDataContext();
         // GET: LopHP_SV
-        public ActionResult getAddSV(string mssv)
+        public ActionResult getAddSV(string malop)
         {
-            ViewBag.MSSV = mssv;
+            ViewBag.MaLop = malop;
             return View();
         }
 
