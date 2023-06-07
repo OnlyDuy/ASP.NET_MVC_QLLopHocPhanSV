@@ -20,23 +20,26 @@ namespace QLLopHocPhanSV.Controllers
 
         public ActionResult postAddSV(string listmssv)
         {
-            var rs = JsonConvert.DeserializeObject<string[]>(listmssv)[0];
-            //Result_ett<string> rse = new Result_ett<string>();
+            var rs = JsonConvert.DeserializeObject<string[]>(listmssv);
 
-            //string maLop = Request["MaLop"];
-            //string mSSV = Request["MSSV"];
-            //string hoTen = Request["HoTen"];
+            foreach (var mssv in rs)
+            {
+                var sinhvien = db.tbl_SinhViens.FirstOrDefault(sv => sv.MSSV == mssv);
 
-            //tbl_LopHocPhan_SinhVien newLHP_SV = new tbl_LopHocPhan_SinhVien();
-            //newLHP_SV.MaLop = maLop;
-            //newLHP_SV.MSSV = mSSV;
-            //newLHP_SV.HoTen = hoTen;
-            //// Gọi đến bảng sinh viên và insert dữ liệu
-            //db.tbl_LopHocPhan_SinhViens.InsertOnSubmit(newLHP_SV);
-            //// Lưu thay đổi
-            //db.SubmitChanges();
+                if (sinhvien != null)
+                {
+                    string maLop = ViewBag.MaLop;
+                    tbl_LopHocPhan_SinhVien newLHP_SV = new tbl_LopHocPhan_SinhVien();
+                    newLHP_SV.MaLop = maLop;
+                    newLHP_SV.MSSV = sinhvien.MSSV;
+                    newLHP_SV.HoTen = sinhvien.HoTen;
+                    db.tbl_LopHocPhan_SinhViens.InsertOnSubmit(newLHP_SV);
+                }
+            }
 
-            return Content(rs);
+            db.SubmitChanges();
+
+            return Content(JsonConvert.SerializeObject(rs));
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿@model List<QLLopHocPhanSV.Models.tbl_SinhVien>
-@{
-    ViewBag.Title = "Lớp của Sinh Viên";
-}﻿
+﻿
 
 <div class="content-wrapper">
     <div>
@@ -57,8 +54,8 @@
 
     function getList() {
         $.ajax({
-            url: "/SinhVien/getListSvToAdd?malop=@ViewBag.MaLop",
-            method: "GET",
+            url: "/SinhVien/getListSvToAdd?mssv=@ViewBag.mssv",
+            method: "POST",
             success: function (result) {
                 var obj = JSON.parse(result)
                 console.log(obj)
@@ -66,6 +63,19 @@
             }
         })
     }
+
+    @*function getList() {
+        $.ajax({
+            url: "/SinhVien/getListSvToAdd?malop=@ViewBag.MaLop",
+            method: "POST", // Thay đổi phương thức của yêu cầu thành POST
+            success: function (result) {
+                var obj = JSON.parse(result);
+                console.log(obj);
+                renderInputTable(obj);
+            }
+        });
+    }*@
+
 
     getList()
 
@@ -100,13 +110,27 @@
         let listmssv = JSON.stringify(boNhoThemSV)
         $.ajax({
             url: "/LopHP_SV/postAddSV",
-            method: "GET",
+            method: "POST",
             data: { listmssv },
             success: function () {
-                toastr.info("Đã thêm sinh viên vào lớp họp phần");
+                toastr.success("Đã thêm sinh viên vào lớp họp phần");
             },
         });
     }
+
+    //function Save() {
+    //    console.log(boNhoThemSV);
+    //    let listmssv = JSON.stringify(boNhoThemSV);
+    //    $.ajax({
+    //        url: "/LopHP_SV/postAddSV",
+    //        method: "POST", // Thay đổi phương thức của yêu cầu thành POST
+    //        data: { listmssv },
+    //        success: function () {
+    //            toastr.info("Đã thêm sinh viên vào lớp họp phần");
+    //        },
+    //    });
+    //}
+
 
     $(document).on('change', 'input[name="non-selected-student"]', function () {
         var MSSV = $(this).val()
