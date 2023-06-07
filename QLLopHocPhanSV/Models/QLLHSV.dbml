@@ -22,15 +22,6 @@
       <Association Name="tbl_GiangVien_tbl_LopHocPhan" Member="tbl_GiangVien" ThisKey="MaGiangVien" OtherKey="MaGiangVien" Type="tbl_GiangVien" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan_SinhViens">
-    <Type Name="tbl_LopHocPhan_SinhVien">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="MaLop" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="MSSV" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="tbl_LopHocPhan_tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan" ThisKey="MaLop" OtherKey="MaLop" Type="tbl_LopHocPhan" IsForeignKey="true" />
-      <Association Name="tbl_SinhVien_tbl_LopHocPhan_SinhVien" Member="tbl_SinhVien" ThisKey="MSSV" OtherKey="MSSV" Type="tbl_SinhVien" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.tbl_NguoiDung" Member="tbl_NguoiDungs">
     <Type Name="tbl_NguoiDung">
       <Column Name="UserID" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -59,6 +50,15 @@
       <Column Name="NgaySinh" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="GioiTinh" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="tbl_SinhVien_tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan_SinhViens" ThisKey="MSSV" OtherKey="MSSV" Type="tbl_LopHocPhan_SinhVien" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan_SinhViens">
+    <Type Name="tbl_LopHocPhan_SinhVien">
+      <Column Name="MaLop" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="MSSV" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="HoTen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="tbl_LopHocPhan_tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan" ThisKey="MaLop" OtherKey="MaLop" Type="tbl_LopHocPhan" IsForeignKey="true" />
+      <Association Name="tbl_SinhVien_tbl_LopHocPhan_SinhVien" Member="tbl_SinhVien" ThisKey="MSSV" OtherKey="MSSV" Type="tbl_SinhVien" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

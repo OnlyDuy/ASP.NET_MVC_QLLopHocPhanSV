@@ -1,0 +1,123 @@
+﻿@model List<QLLopHocPhanSV.Models.tbl_SinhVien>
+@{
+    ViewBag.Title = "Lớp của Sinh Viên";
+}﻿
+
+<div class="content-wrapper">
+    <div>
+        <button onclick="Save()">Save</button>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table id="output" class="table table-bordered table-hover">
+                <thead>
+                    <tr align='center'>
+                        <th>MSSV</th>
+                        <th>Họ Tên</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table id="input" class="table table-bordered table-hover">
+                <thead>
+                    <tr align='center'>
+                        <th>MSSV</th>
+                        <th>Họ Tên</th>
+                        <th>Thêm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    var boNhoThemSV =[];
+
+    function renderInputTable(data) {
+        var tbody = $('#input').children('tbody')
+        var html = ''
+        for (let i = 0; i < data.length; i++) {
+            html += `<tr>
+                        <td>` + data[i].mssv + `</td>
+                        <td>` + data[i].hoten + `</td>
+                        <td> <input type="checkbox" name="non-selected-student" value="` + data[i].mssv + `" ` + (data[i].Status ? 'checked' : '') + `> </td>
+                    </tr>`;
+            if (data[i].Status) {
+                addToOutputTable(data[i].MSSV, data[i].HoTen);
+            }
+        }
+        tbody.append(html)
+    }
+
+    function getList() {
+        $.ajax({
+            url: "/SinhVien/getListSvToAdd?mssv=@ViewBag.mssv",
+            method: "GET",
+            success: function (result) {
+                var obj = JSON.parse(result)
+                console.log(obj)
+                renderInputTable(obj)
+            }
+        })
+    }
+
+    getList()
+
+    function addToOutputTable(MSSV, HoTen) {
+        var tbody = $('#output').children('tbody')
+        var html = `<tr>
+                        <td>` + MSSV + `</td>
+                        <td>` + HoTen + `</td>
+                        <td> <button class="btn btn-danger" onclick="removeFromOutputTable('` + MSSV + `')">Xóa</button> </td>
+                    </tr>`;
+        tbody.append(html)
+        boNhoThemSV.push(MSSV)
+    }
+
+    function removeFromOutputTable(MSSV) {
+        $('#output').children('tbody').find('tr').each(function () {
+            if ($(this).children('td:first').text() == MSSV) {
+                $(this).remove()
+            }
+        })
+        $('#input').children('tbody').find('tr').each(function () {
+            if ($(this).children('td:first').text() == MSSV) {
+                $(this).find('input[name="non-selected-student"]').prop('checked', false)
+            }
+        })
+        boNhoThemSV = boNhoThemSV.filter(sv => sv !== MSSV)
+
+    }
+
+    function Save() {
+        console.log(boNhoThemSV)
+        let listmssv = JSON.stringify(boNhoThemSV)
+        $.ajax({
+            url: "/LopHP_SV/postAddSV",
+            method: "GET",
+            data: { listmssv },
+            success: function () {
+                toastr.info("Đã thêm sinh viên vào lớp họp phần");
+            },
+        });
+    }
+
+    $(document).on('change', 'input[name="non-selected-student"]', function () {
+        var MSSV = $(this).val()
+        var HoTen = $(this).closest('tr').children('td:nth-child(2)').text()
+
+        if ($(this).is(':checked')) {
+            addToOutputTable(MSSV, HoTen)
+        } else {
+            removeFromOutputTable(MSSV)
+        }
+    })
+
+
+</script>

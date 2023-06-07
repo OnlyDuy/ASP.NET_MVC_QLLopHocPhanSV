@@ -200,5 +200,22 @@ namespace QLLopHocPhanSV.Controllers
             return JsonConvert.SerializeObject(rs);
         }
 
+        // Lấy dssv để add LopHP
+        public string getListSvToAdd (string mssv)
+        {
+            var dssv_tronglop = (from sv_tronglop in db.tbl_LopHocPhan_SinhViens
+                                 where (sv_tronglop.MSSV.Equals(mssv))
+                                 select sv_tronglop.MSSV).ToList();
+
+            var dssv = from s in db.tbl_SinhViens
+                       select new
+                       {
+                           mssv = s.MSSV,
+                           hoten = s.HoTen,
+                           status = dssv_tronglop.Contains(s.MSSV)
+                       };
+            return JsonConvert.SerializeObject(dssv);
+        }
+
     }
 }
