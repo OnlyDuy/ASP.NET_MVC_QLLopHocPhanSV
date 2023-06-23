@@ -98,7 +98,8 @@
         console.log(searchVal)
     }
 
-    // Gọi hàm sắp xếp 
+    // Gọi hàm sắp xếp
+    // hàm setSortType() được sử dụng để lấy giá trị từ phần tử có id="sortType" trong HTML, chuyển đổi giá trị đó thành số nguyên
     function setSortType() {
         sortType = parseInt($("#sortType").val())
         console.log(sortType)
@@ -153,8 +154,8 @@
         $.ajax({
             // Thuộc tính url này sẽ gọi đến 1 phương thức nằm trong controller
             url: "/SinhVien/GetListSV",
-            // method POST để đọc dữ liệu trong database
-            // method POST để ghi dữ liệu trong database
+            // GET: Gửi yêu cầu lên Server, yêu cầu Server gửi dữ liệu về Client
+            // POST: Gửi yêu cầu lên Server, yêu cầu Server lưu lại, tạo mới dữ liệu
             method: "GET",
             data: { searchVal, sortType, pageSize, currentPage },
             success: function (result) {
@@ -230,15 +231,20 @@
     }
 
     function Delete(ele) {
+        // Hàm nhận một tham số là "ele" đại diện cho phần tử HTML (element) mà người dùng đã thực hiện sự kiện xóa.
         var mssv = $(ele).parents("tr").find(".MSSV").text();
+        // Sử dụng jQuery để truy cập và tìm các phần tử trong hàng (row) chứa phần tử HTML đã được click. 
         var name = $(ele).parents("tr").find(".HoTen").text();
         console.log(mssv);
+        // Thông báo cho người dùng xác nhận xóa Sinh viên được chọn hay không
         if (confirm("Xác nhận xóa sinh viên:" + name)) {
             $.ajax({
                 url: "/Sinhvien/Delete",
                 method: "POST",
                 data: { mssv },
                 success: function (result, status, xhr) {
+                    // Hàm xử lý kết quả trả về. Kết quả được phân tích thành một đối tượng JSON 
+                    // Bằng cách sử dụng hàm "JSON.parse".
                     let rs = JSON.parse(result);
                     console.log(rs);
                     if (rs.ErrCode == 1) {
@@ -247,6 +253,7 @@
                     }
                     else {
                         toastr.error(rs.Message);
+
                     }
                 },
                 error: function () {

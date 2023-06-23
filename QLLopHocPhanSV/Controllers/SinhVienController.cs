@@ -140,10 +140,12 @@ namespace QLLopHocPhanSV.Controllers
        
         public string PostEdit()
         {
+            // Khới tạo 1 đối tượng có tên là Result_ett<string>
             Result_ett<string> rs = new Result_ett<string>();
             //xử lý cập nhật
             try
             {
+                // Lấy các giá trị Request được gửi lên từ csdl
                 string hoTen = Request["HoTen"];
                 string mSSV = Request["Mssv"];
                 string diaChi = Request["DiaChi"];
@@ -152,7 +154,11 @@ namespace QLLopHocPhanSV.Controllers
                 string ngaySinh = Request["NgaySinh"];
                 string gioiTinh = Request["GioiTinh"];
 
+                // Đoạn code truy vấn dữ liệu để tìm một đối tượng o cớ thuộc tính MSSV trùng khớp với giá trị mSSV 
+                // được lấy từ giá trị Request. Đối tượng tìm được sẽ gán váo newSV
                 tbl_SinhVien newSV = db.tbl_SinhViens.Where(o => o.MSSV.Equals(mSSV)).FirstOrDefault();
+
+                // các thuộc tính của đối tượng newSV sẽ được cập nhật với các giá trị lấy từ Request
                 newSV.HoTen = hoTen;
                 newSV.KhoaHoc = khoaHoc;
                 newSV.LopQuanLy = lopQuanLy;
@@ -175,6 +181,7 @@ namespace QLLopHocPhanSV.Controllers
                 rs.Message = "Cập nhật sinh viên thất bại";
                 return JsonConvert.SerializeObject(rs);
             }
+            // Chuyển thành chuỗi JSON và trả về kết quả
             return JsonConvert.SerializeObject(rs);
         }
 
@@ -185,6 +192,7 @@ namespace QLLopHocPhanSV.Controllers
             try
             {
                 tbl_SinhVien delObj = db.tbl_SinhViens.Where(o => o.MSSV.Equals(mssv)).FirstOrDefault();
+                // gọi phương thức "DeleteOnSubmit(delObj)" để đánh dấu đối tượng "delObj" để xóa khỏi cơ sở dữ liệu.
                 db.tbl_SinhViens.DeleteOnSubmit(delObj);
                 db.SubmitChanges();
                 rs.ErrCode = EnumErrCode.Success;
