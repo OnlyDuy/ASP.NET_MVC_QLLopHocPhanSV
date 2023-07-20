@@ -101,6 +101,14 @@ namespace QLLopHocPhanSV.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<tbl_LopHocPhan_SinhVien> tbl_LopHocPhan_SinhViens
+		{
+			get
+			{
+				return this.GetTable<tbl_LopHocPhan_SinhVien>();
+			}
+		}
+		
 		public System.Data.Linq.Table<tbl_NhomQuyen> tbl_NhomQuyens
 		{
 			get
@@ -114,14 +122,6 @@ namespace QLLopHocPhanSV.Models
 			get
 			{
 				return this.GetTable<tbl_SinhVien>();
-			}
-		}
-		
-		public System.Data.Linq.Table<tbl_LopHocPhan_SinhVien> tbl_LopHocPhan_SinhViens
-		{
-			get
-			{
-				return this.GetTable<tbl_LopHocPhan_SinhVien>();
 			}
 		}
 	}
@@ -541,7 +541,7 @@ namespace QLLopHocPhanSV.Models
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
-		private string _UserID;
+		private int _UserID;
 		
 		private string _Password;
 		
@@ -551,15 +551,13 @@ namespace QLLopHocPhanSV.Models
 		
 		private string _DiaChi;
 		
-		private string _MaNhomQuyen;
-		
-		private EntityRef<tbl_NhomQuyen> _tbl_NhomQuyen;
+		private string _Username;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
-    partial void OnUserIDChanging(string value);
+    partial void OnUserIDChanging(int value);
     partial void OnUserIDChanged();
     partial void OnPasswordChanging(string value);
     partial void OnPasswordChanged();
@@ -569,18 +567,17 @@ namespace QLLopHocPhanSV.Models
     partial void OnSDTChanged();
     partial void OnDiaChiChanging(string value);
     partial void OnDiaChiChanged();
-    partial void OnMaNhomQuyenChanging(string value);
-    partial void OnMaNhomQuyenChanged();
+    partial void OnUsernameChanging(string value);
+    partial void OnUsernameChanged();
     #endregion
 		
 		public tbl_NguoiDung()
 		{
-			this._tbl_NhomQuyen = default(EntityRef<tbl_NhomQuyen>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="NVarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string UserID
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int UserID
 		{
 			get
 			{
@@ -679,60 +676,22 @@ namespace QLLopHocPhanSV.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaNhomQuyen", DbType="NVarChar(50)")]
-		public string MaNhomQuyen
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Username", DbType="NVarChar(50)")]
+		public string Username
 		{
 			get
 			{
-				return this._MaNhomQuyen;
+				return this._Username;
 			}
 			set
 			{
-				if ((this._MaNhomQuyen != value))
+				if ((this._Username != value))
 				{
-					if (this._tbl_NhomQuyen.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnMaNhomQuyenChanging(value);
+					this.OnUsernameChanging(value);
 					this.SendPropertyChanging();
-					this._MaNhomQuyen = value;
-					this.SendPropertyChanged("MaNhomQuyen");
-					this.OnMaNhomQuyenChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tbl_NhomQuyen_tbl_NguoiDung", Storage="_tbl_NhomQuyen", ThisKey="MaNhomQuyen", OtherKey="MaNhomQuyen", IsForeignKey=true)]
-		public tbl_NhomQuyen tbl_NhomQuyen
-		{
-			get
-			{
-				return this._tbl_NhomQuyen.Entity;
-			}
-			set
-			{
-				tbl_NhomQuyen previousValue = this._tbl_NhomQuyen.Entity;
-				if (((previousValue != value) 
-							|| (this._tbl_NhomQuyen.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._tbl_NhomQuyen.Entity = null;
-						previousValue.tbl_NguoiDungs.Remove(this);
-					}
-					this._tbl_NhomQuyen.Entity = value;
-					if ((value != null))
-					{
-						value.tbl_NguoiDungs.Add(this);
-						this._MaNhomQuyen = value.MaNhomQuyen;
-					}
-					else
-					{
-						this._MaNhomQuyen = default(string);
-					}
-					this.SendPropertyChanged("tbl_NhomQuyen");
+					this._Username = value;
+					this.SendPropertyChanged("Username");
+					this.OnUsernameChanged();
 				}
 			}
 		}
@@ -758,6 +717,69 @@ namespace QLLopHocPhanSV.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tbl_LopHocPhan_SinhVien")]
+	public partial class tbl_LopHocPhan_SinhVien
+	{
+		
+		private string _MaLop;
+		
+		private string _MSSV;
+		
+		private string _HoTen;
+		
+		public tbl_LopHocPhan_SinhVien()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaLop", DbType="NVarChar(50)")]
+		public string MaLop
+		{
+			get
+			{
+				return this._MaLop;
+			}
+			set
+			{
+				if ((this._MaLop != value))
+				{
+					this._MaLop = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MSSV", DbType="NVarChar(50)")]
+		public string MSSV
+		{
+			get
+			{
+				return this._MSSV;
+			}
+			set
+			{
+				if ((this._MSSV != value))
+				{
+					this._MSSV = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HoTen", DbType="NVarChar(50)")]
+		public string HoTen
+		{
+			get
+			{
+				return this._HoTen;
+			}
+			set
+			{
+				if ((this._HoTen != value))
+				{
+					this._HoTen = value;
+				}
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tbl_NhomQuyen")]
 	public partial class tbl_NhomQuyen : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -767,8 +789,6 @@ namespace QLLopHocPhanSV.Models
 		private string _MaNhomQuyen;
 		
 		private string _TenNhomQuyen;
-		
-		private EntitySet<tbl_NguoiDung> _tbl_NguoiDungs;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -782,7 +802,6 @@ namespace QLLopHocPhanSV.Models
 		
 		public tbl_NhomQuyen()
 		{
-			this._tbl_NguoiDungs = new EntitySet<tbl_NguoiDung>(new Action<tbl_NguoiDung>(this.attach_tbl_NguoiDungs), new Action<tbl_NguoiDung>(this.detach_tbl_NguoiDungs));
 			OnCreated();
 		}
 		
@@ -826,19 +845,6 @@ namespace QLLopHocPhanSV.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="tbl_NhomQuyen_tbl_NguoiDung", Storage="_tbl_NguoiDungs", ThisKey="MaNhomQuyen", OtherKey="MaNhomQuyen")]
-		public EntitySet<tbl_NguoiDung> tbl_NguoiDungs
-		{
-			get
-			{
-				return this._tbl_NguoiDungs;
-			}
-			set
-			{
-				this._tbl_NguoiDungs.Assign(value);
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -857,18 +863,6 @@ namespace QLLopHocPhanSV.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_tbl_NguoiDungs(tbl_NguoiDung entity)
-		{
-			this.SendPropertyChanging();
-			entity.tbl_NhomQuyen = this;
-		}
-		
-		private void detach_tbl_NguoiDungs(tbl_NguoiDung entity)
-		{
-			this.SendPropertyChanging();
-			entity.tbl_NhomQuyen = null;
 		}
 	}
 	
@@ -1017,7 +1011,7 @@ namespace QLLopHocPhanSV.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NgaySinh", DbType="DateTime")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NgaySinh", DbType="Date")]
 		public System.Nullable<System.DateTime> NgaySinh
 		{
 			get
@@ -1074,69 +1068,6 @@ namespace QLLopHocPhanSV.Models
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.tbl_LopHocPhan_SinhVien")]
-	public partial class tbl_LopHocPhan_SinhVien
-	{
-		
-		private string _MaLop;
-		
-		private string _MSSV;
-		
-		private string _HoTen;
-		
-		public tbl_LopHocPhan_SinhVien()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MaLop", DbType="NVarChar(50)")]
-		public string MaLop
-		{
-			get
-			{
-				return this._MaLop;
-			}
-			set
-			{
-				if ((this._MaLop != value))
-				{
-					this._MaLop = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MSSV", DbType="NVarChar(50)")]
-		public string MSSV
-		{
-			get
-			{
-				return this._MSSV;
-			}
-			set
-			{
-				if ((this._MSSV != value))
-				{
-					this._MSSV = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HoTen", DbType="NVarChar(50)")]
-		public string HoTen
-		{
-			get
-			{
-				return this._HoTen;
-			}
-			set
-			{
-				if ((this._HoTen != value))
-				{
-					this._HoTen = value;
-				}
 			}
 		}
 	}

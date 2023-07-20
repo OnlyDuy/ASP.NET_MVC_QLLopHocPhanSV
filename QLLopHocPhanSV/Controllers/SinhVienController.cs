@@ -17,7 +17,7 @@ namespace QLLopHocPhanSV.Controllers
         QLLHSVDataContext db = new QLLHSVDataContext();
 
         // GET: SinhVien phương thức dùng để hiển thị trang chủ view của ứng dụng
-        public ActionResult Index()
+        public ActionResult Index() 
         {
             return View();
         }
@@ -72,6 +72,7 @@ namespace QLLopHocPhanSV.Controllers
             tbl_SinhVien sinhvien = new tbl_SinhVien();
             sinhvien = db.tbl_SinhViens.Where(o => o.MSSV.Equals(mssv)).FirstOrDefault();
             return JsonConvert.SerializeObject(sinhvien);
+
         }
         public string PostCreate()
         {
@@ -106,7 +107,7 @@ namespace QLLopHocPhanSV.Controllers
                     else
                     {
                         tbl_SinhVien newSV = new tbl_SinhVien();
-                        newSV.MSSV= mSSV;
+                        newSV.MSSV = mSSV;
                         newSV.HoTen = hoTen;
                         newSV.KhoaHoc = khoaHoc;
                         newSV.LopQuanLy = lopQuanLy;

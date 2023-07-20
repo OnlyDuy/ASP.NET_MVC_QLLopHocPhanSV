@@ -24,32 +24,12 @@
   </Table>
   <Table Name="dbo.tbl_NguoiDung" Member="tbl_NguoiDungs">
     <Type Name="tbl_NguoiDung">
-      <Column Name="UserID" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="Password" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="HoTen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="SDT" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="DiaChi" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="MaNhomQuyen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="tbl_NhomQuyen_tbl_NguoiDung" Member="tbl_NhomQuyen" ThisKey="MaNhomQuyen" OtherKey="MaNhomQuyen" Type="tbl_NhomQuyen" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.tbl_NhomQuyen" Member="tbl_NhomQuyens">
-    <Type Name="tbl_NhomQuyen">
-      <Column Name="MaNhomQuyen" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="TenNhomQuyen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="tbl_NhomQuyen_tbl_NguoiDung" Member="tbl_NguoiDungs" ThisKey="MaNhomQuyen" OtherKey="MaNhomQuyen" Type="tbl_NguoiDung" />
-    </Type>
-  </Table>
-  <Table Name="dbo.tbl_SinhVien" Member="tbl_SinhViens">
-    <Type Name="tbl_SinhVien">
-      <Column Name="MSSV" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="HoTen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="DiaChi" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="KhoaHoc" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="LopQuanLy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="NgaySinh" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-      <Column Name="GioiTinh" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Association Name="tbl_SinhVien_tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan_SinhViens" ThisKey="MSSV" OtherKey="MSSV" Type="tbl_LopHocPhan_SinhVien" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
     </Type>
   </Table>
   <Table Name="dbo.tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan_SinhViens">
@@ -59,6 +39,24 @@
       <Column Name="HoTen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Association Name="tbl_LopHocPhan_tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan" ThisKey="MaLop" OtherKey="MaLop" Type="tbl_LopHocPhan" IsForeignKey="true" />
       <Association Name="tbl_SinhVien_tbl_LopHocPhan_SinhVien" Member="tbl_SinhVien" ThisKey="MSSV" OtherKey="MSSV" Type="tbl_SinhVien" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_NhomQuyen" Member="tbl_NhomQuyens">
+    <Type Name="tbl_NhomQuyen">
+      <Column Name="MaNhomQuyen" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TenNhomQuyen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tbl_SinhVien" Member="tbl_SinhViens">
+    <Type Name="tbl_SinhVien">
+      <Column Name="MSSV" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="HoTen" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DiaChi" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="KhoaHoc" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="LopQuanLy" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="NgaySinh" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="GioiTinh" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="tbl_SinhVien_tbl_LopHocPhan_SinhVien" Member="tbl_LopHocPhan_SinhViens" ThisKey="MSSV" OtherKey="MSSV" Type="tbl_LopHocPhan_SinhVien" />
     </Type>
   </Table>
 </Database>

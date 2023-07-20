@@ -2256,9 +2256,11 @@
     <Content Include="Views\LopHP\Index.cshtml" />
     <Content Include="Views\LopHP\Create.cshtml" />
     <Content Include="Views\LopHP_SV\getAddSV.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Default\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

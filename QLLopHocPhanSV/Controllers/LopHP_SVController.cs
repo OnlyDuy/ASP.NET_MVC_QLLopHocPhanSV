@@ -32,7 +32,7 @@ namespace QLLopHocPhanSV.Controllers
                     tbl_LopHocPhan_SinhVien newLHP_SV = new tbl_LopHocPhan_SinhVien();
                     newLHP_SV.MaLop = maLop;
                     newLHP_SV.MSSV = sinhvien.MSSV;
-                    newLHP_SV.HoTen = sinhvien.HoTen;
+                    //newLHP_SV.HoTen = sinhvien.HoTen;
                     db.tbl_LopHocPhan_SinhViens.InsertOnSubmit(newLHP_SV);
                 }
             }
